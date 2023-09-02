@@ -3,6 +3,20 @@
 import { useAccount, useSignMessage } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
+import * as siwe from "siwe";
+
+function createSiweMessage(address: string): string {
+  const siweMessage = new siwe.SiweMessage({
+    domain: "localhost:3001",
+    address,
+    statement: "Welcome to myawesomedapp. Please login to continue.",
+    uri: "http://localhost:3000/signin",
+    version: "1",
+    chainId: 1,
+    nonce: "07EwlNV39F7FRRqpu",
+  });
+  return siweMessage.prepareMessage();
+}
 
 function SignIn() {
   const { address } = useAccount();
@@ -24,6 +38,16 @@ function SignIn() {
     signMessage,
   } = useSignMessage({ message });
 
+  const [siweMessage, setSiweMessage] = useState("");
+  useEffect(() => {
+    if (address) {
+      setSiweMessage(createSiweMessage(address));
+    }
+  }, [address]);
+  const { data: siweSignature, signMessage: signSiweMessage } = useSignMessage({
+    message: siweMessage,
+  });
+
   return (
     <div
       style={{
@@ -37,9 +61,12 @@ function SignIn() {
     >
       <ConnectButton />
       <button onClick={() => signMessage()}>Sign Message</button>
+      <button onClick={() => signSiweMessage()}>Sign SIWE Message</button>
       <div>Message: {message}</div>
       <div>Signature: {signature}</div>
       {isError && <div>Error: {error?.message}</div>}
+      <div>SIWE Message: {siweMessage}</div>
+      <div>SIWE Signature: {siweSignature}</div>
     </div>
   );
 }
