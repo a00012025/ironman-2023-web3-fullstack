@@ -168,19 +168,11 @@ function Profile() {
   return <button onClick={() => connect()}>Connect Wallet</button>;
 }
 
-function Transaction() {
-  const { isConnected } = useAccount();
-
-  if (isConnected) return <div>123</div>;
-  return null;
-}
-
 export default function App() {
   return (
     <WagmiConfig config={config}>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <Profile />
-        <Transaction />
       </main>
     </WagmiConfig>
   );

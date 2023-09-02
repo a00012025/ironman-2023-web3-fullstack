@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
-  getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
   connectorsForWallets,
@@ -18,6 +17,7 @@ import {
   arbitrum,
   goerli,
   mainnet,
+  sepolia,
   optimism,
   polygon,
   base,
@@ -29,6 +29,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
+    sepolia,
     polygon,
     optimism,
     arbitrum,
@@ -42,7 +43,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   ]
 );
 
-const projectId = "YOUR_PROJECT_ID";
+const projectId = "8915b4a2b51ba9c555cfd42bbf247cc9";
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
