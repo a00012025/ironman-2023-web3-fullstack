@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/ethereum/go-ethereum v1.12.2
+	github.com/spruceid/siwe-go v0.2.0
 	github.com/stretchr/testify v1.8.1
 )
 
@@ -16,7 +17,6 @@ require (
 	github.com/holiman/uint256 v1.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/relvacode/iso8601 v1.3.0 // indirect
-	github.com/spruceid/siwe-go v0.2.0 // indirect
 	golang.org/x/crypto v0.12.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
