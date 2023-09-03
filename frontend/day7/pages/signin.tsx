@@ -13,7 +13,6 @@ function createSiweMessage(address: string): string {
     uri: "http://localhost:3000/signin",
     version: "1",
     chainId: 1,
-    nonce: "07EwlNV39F7FRRqpu",
   });
   return siweMessage.prepareMessage();
 }
