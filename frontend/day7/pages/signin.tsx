@@ -7,7 +7,7 @@ import * as siwe from "siwe";
 
 function createSiweMessage(address: string): string {
   const siweMessage = new siwe.SiweMessage({
-    domain: "localhost:3001",
+    domain: "localhost:3000",
     address,
     statement: "Welcome to myawesomedapp. Please login to continue.",
     uri: "http://localhost:3000/signin",
