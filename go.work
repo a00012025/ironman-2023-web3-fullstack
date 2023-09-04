@@ -3,4 +3,5 @@ go 1.19
 use (
 	./backend/day9
 	./backend/day10
+	./backend/day11
 )
