@@ -122,5 +122,6 @@ func main() {
 			break
 		}
 	}
+	// Status = 1 if transaction succeeded
 	fmt.Printf("tx is confirmed: %v. Block number: %v\n", receipt.Status, receipt.BlockNumber)
 }
