@@ -16,9 +16,12 @@ dependencies:
   base58check: ^2.0.0
   wallet: ^0.0.12+1
   http: ^1.1.0
+  flutter_dotenv: ^5.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
 flutter:
   uses-material-design: true
+  assets:
+    - .env

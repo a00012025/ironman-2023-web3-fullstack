@@ -1,19 +1,36 @@
+import 'dart:typed_data';
+
 import 'package:flutter_bitcoin/flutter_bitcoin.dart' hide Transaction;
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+final alchemyApiKey = dotenv.get('ALCHEMY_API_KEY');
+final web3Client =
+    Web3Client('https://eth-sepolia.g.alchemy.com/v2/$alchemyApiKey', Client());
 
 Future<String> signTransaction({
   required EthPrivateKey privateKey,
   required Transaction transaction,
 }) async {
   try {
-    final client = Web3Client(
-        'https://eth-sepolia.g.alchemy.com/v2/DgoQgIklXGSGCY5-7rekG4CiV6nKO-A6',
-        Client());
-    var result =
-        await client.signTransaction(privateKey, transaction, chainId: 1);
+    final result = await web3Client.signTransaction(
+      privateKey,
+      transaction,
+      chainId: 11155111,
+    );
     return HEX.encode(result);
+  } catch (e) {
+    rethrow;
+  }
+}
+
+Future<String> sendRawTransaction(String tx) async {
+  try {
+    final txHash =
+        await web3Client.sendRawTransaction(Uint8List.fromList(HEX.decode(tx)));
+    return txHash;
   } catch (e) {
     rethrow;
   }
