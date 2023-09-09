@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String mnemonic = "";
   HDWallet? ethWallet;
   String? ethAddress;
-  BigInt? uniBalance;
+  double? uniBalance;
   String? ethTxHash;
 
   void refreshMnemonic() {

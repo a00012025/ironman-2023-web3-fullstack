@@ -14,11 +14,14 @@ Future<String> signTransaction({
   required Transaction transaction,
 }) async {
   try {
-    final result = await web3Client.signTransaction(
+    var result = await web3Client.signTransaction(
       privateKey,
       transaction,
       chainId: 11155111,
     );
+    if (transaction.isEIP1559) {
+      result = prependTransactionType(0x02, result);
+    }
     return HEX.encode(result);
   } catch (e) {
     rethrow;
@@ -70,14 +73,11 @@ const abi = [
   },
 ];
 
-Future<BigInt> readTokenBalance(
+Future<double> readTokenBalance(
     String contractAddress, String walletAddress) async {
   try {
     final contract = DeployedContract(
-      ContractAbi.fromJson(
-        jsonEncode(abi),
-        'ERC20',
-      ),
+      ContractAbi.fromJson(jsonEncode(abi), 'ERC20'),
       EthereumAddress.fromHex(contractAddress),
     );
     final balanceFunction = contract.function('balanceOf');
@@ -86,8 +86,14 @@ Future<BigInt> readTokenBalance(
       function: balanceFunction,
       params: [EthereumAddress.fromHex(walletAddress)],
     );
-    final balanceStr = balance.first.toString();
-    return BigInt.parse(balanceStr);
+    final rawBalance = BigInt.parse(balance.first.toString());
+    final decimanls = await web3Client.call(
+      contract: contract,
+      function: contract.function('decimals'),
+      params: [],
+    );
+    final decimals = int.parse(decimanls.first.toString());
+    return rawBalance / BigInt.from(10).pow(decimals);
   } catch (e) {
     rethrow;
   }
@@ -120,10 +126,7 @@ Future<String> sendTokenTransaction({
 }) async {
   try {
     final contract = DeployedContract(
-      ContractAbi.fromJson(
-        jsonEncode(abi),
-        'ERC20',
-      ),
+      ContractAbi.fromJson(jsonEncode(abi), 'ERC20'),
       EthereumAddress.fromHex(contractAddress),
     );
     final transferFunction = contract.function('transfer');
@@ -131,10 +134,8 @@ Future<String> sendTokenTransaction({
       contract: contract,
       function: transferFunction,
       parameters: [EthereumAddress.fromHex(toAddress), amount],
-      gasPrice: await web3Client.getGasPrice(),
-      // If using EIP-1559, use the following instead of the above:
-      // maxFeePerGas: await web3Client.getGasPrice(),
-      // maxPriorityFeePerGas: await getMaxPriorityFee(),
+      maxFeePerGas: await web3Client.getGasPrice(),
+      maxPriorityFeePerGas: await getMaxPriorityFee(),
     );
     final tx = await signTransaction(
       privateKey: privateKey,
