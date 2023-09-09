@@ -1,0 +1,19 @@
+name: awesome_wallet
+description: A new Flutter project.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.5 <4.0.0"
+
+dependencies:
+  bip39: ^1.0.6
+  hex: ^0.2.0
+  http: ^0.13.6
+  web3dart:
+    git:
+      url: https://github.com/kryptogo/web3dart.git
+      ref: main
+  ens_dart:
+    git:
+      url: https://github.com/kryptogo/ens_dart.git
+      ref: master
