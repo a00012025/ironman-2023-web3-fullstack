@@ -24,7 +24,6 @@ Future<List<String>> getENSNames(String wallet) async {
   if (response.statusCode >= 400) {
     throw Exception(response.body);
   }
-
   final parsedData = jsonDecode(response.body);
   final responseData = parsedData['data'];
 
@@ -35,10 +34,6 @@ Future<List<String>> getENSNames(String wallet) async {
     }
   }
   return ensNames;
-}
-
-bool skipReverseRegistrar(String ensName) {
-  return ensName.endsWith(".addr.reverse");
 }
 
 void main() async {
@@ -53,6 +48,8 @@ void main() async {
 
   final resolvedAddress = await ens.withName("vitalik.eth").getAddress();
   print('resolvedAddress: $resolvedAddress');
+  final textRecord = await ens.withName("vitalik.eth").getTextRecord();
+  print('textRecord: $textRecord');
 
   final reverseEnsName = await ens
       .withAddress("0xd8da6bf26964af9d7eed9e03e53415d37aa96045")
@@ -63,3 +60,5 @@ void main() async {
       await getENSNames("0xd8da6bf26964af9d7eed9e03e53415d37aa96045");
   print('allEnsNames: $allEnsNames');
 }
+
+
