@@ -89,13 +89,6 @@ func sendUniTokenTransferTx(client *ethclient.Client, address common.Address, pr
 		log.Fatal(err)
 	}
 
-	// get nonce
-	nonce, err := client.PendingNonceAt(context.Background(), common.HexToAddress(address.Hex()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Got nonce: %d\n", nonce)
-
 	// get gas price
 	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
@@ -110,9 +103,7 @@ func sendUniTokenTransferTx(client *ethclient.Client, address common.Address, pr
 			Signer: func(_ common.Address, tx *types.Transaction) (*types.Transaction, error) {
 				return types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 			},
-			GasLimit: 1000000,
 			Value:    big.NewInt(0),
-			Nonce:    big.NewInt(int64(nonce)),
 			GasPrice: gasPrice,
 		},
 		common.HexToAddress("0xE2Dc3214f7096a94077E71A3E218243E289F1067"),
@@ -127,13 +118,6 @@ func sendUniswapSwapTx(client *ethclient.Client, address common.Address, private
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// get nonce
-	nonce, err := client.PendingNonceAt(context.Background(), common.HexToAddress(address.Hex()))
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Got nonce: %d\n", nonce)
 
 	// get gas price
 	gasPrice, err := client.SuggestGasPrice(context.Background())
@@ -150,9 +134,7 @@ func sendUniswapSwapTx(client *ethclient.Client, address common.Address, private
 			Signer: func(_ common.Address, tx *types.Transaction) (*types.Transaction, error) {
 				return types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 			},
-			GasLimit: 1000000,
 			Value:    amountToSend,
-			Nonce:    big.NewInt(int64(nonce)),
 			GasPrice: gasPrice,
 		},
 		big.NewInt(0),
