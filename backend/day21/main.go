@@ -175,7 +175,17 @@ func (c *CombinedTransaction) Type() TransactionType {
 
 	tokenChanges := c.GetTokenChanges()
 	if len(tokenChanges) > 1 {
-		return Swap
+		// Check Swap: 2 tokens, 1 positive, 1 negative
+		if len(tokenChanges) == 2 {
+			sign := 1
+			for _, balanceChange := range tokenChanges {
+				sign *= balanceChange.Sign()
+			}
+			if sign < 0 {
+				return Swap
+			}
+		}
+		return ContractExecution
 	}
 
 	// Check it's a Send or Receive
