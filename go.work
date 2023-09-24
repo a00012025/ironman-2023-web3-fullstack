@@ -7,4 +7,5 @@ use (
 	./backend/day18
 	./backend/day19
 	./backend/day20
+	./backend/day21
 )
