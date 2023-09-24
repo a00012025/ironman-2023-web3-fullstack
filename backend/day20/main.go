@@ -19,7 +19,6 @@ import (
 const transferEventSignature = "Transfer(address,address,uint256)"
 
 // const targetAddress = "0x2089035369B33403DdcaBa6258c34e0B3FfbbBd9"
-// const targetAddress = "0x31d1C7751EAA6374D4138597e8c7b5a1605cC43c"
 const targetAddress = "0x32e0556aeC41a34C3002a264f4694193EBCf44F7"
 
 func main() {
@@ -131,12 +130,12 @@ func main() {
 
 	// listen to new transfer in/out event
 	fmt.Println("Listening to new transfer in/out event...")
-	var transferOutChan = make(chan types.Log)
+	transferOutChan := make(chan types.Log)
 	transferOutSub, err := client.SubscribeFilterLogs(context.Background(), transferOutQuery, transferOutChan)
 	if err != nil {
 		log.Fatalf("Failed to subscribe to transfer out event: %v", err)
 	}
-	var transferInChan = make(chan types.Log)
+	transferInChan := make(chan types.Log)
 	transferInSub, err := client.SubscribeFilterLogs(context.Background(), transferInQuery, transferInChan)
 	if err != nil {
 		log.Fatalf("Failed to subscribe to transfer in event: %v", err)
@@ -180,6 +179,10 @@ func getNameAndDecimals(client *ethclient.Client, address common.Address) (name 
 	}
 	decimals, err = erc20Token.Decimals(nil)
 	if err != nil || decimals == 0 {
+		return
+	}
+	_, err = erc20Token.BalanceOf(nil, common.HexToAddress("0x0000000000000000000000000000000000000000"))
+	if err != nil {
 		return
 	}
 	fmt.Printf("%s is ERC20 token\n", address.Hex())
