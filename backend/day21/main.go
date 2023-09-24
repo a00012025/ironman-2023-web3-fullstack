@@ -117,7 +117,7 @@ func (c *CombinedTransaction) GetTokenChanges() map[string]*big.Int {
 	if c.ExternalTx != nil {
 		value := new(big.Int)
 		value.SetString(c.ExternalTx.Value.Int().String(), 10)
-		tokenChanges["ETH"] = value
+		tokenChanges["ETH"] = value.Neg(value)
 	} else {
 		tokenChanges["ETH"] = big.NewInt(0)
 	}
